@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Download Live Wallpapers</title>
+<meta name="description" content="Free live and still lock-screen wallpapers of our story characters.">
+<meta property="og:title" content="Download Live Wallpapers">
+<meta property="og:description" content="Free live and still lock-screen wallpapers of our story characters.">
+<meta property="og:image" content="wallpapers/ganesh-ji/preview-festive.jpg">
+<meta name="theme-color" content="#1c0f26">
+<style>
+  :root {
+    --bg: #1c0f26; --bg2: #2d1536; --card: #2a1832; --ink: #fff6e6; --muted: #cdb9d6;
+    --gold: #ffc42e; --saffron: #ff8a3d; --line: rgba(255, 220, 160, .18);
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0; min-height: 100vh; color: var(--ink);
+    font: 16px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    background: radial-gradient(1200px 700px at 50% -10%, #5a2748 0%, transparent 60%), linear-gradient(var(--bg2), var(--bg));
+    background-color: var(--bg);
+  }
+  .wrap { max-width: 1000px; margin: 0 auto; padding: 0 16px; }
+  header { text-align: center; padding: 56px 0 28px; }
+  h1 { margin: 0; font-size: clamp(2rem, 7vw, 3.4rem); line-height: 1.1; letter-spacing: -.02em; }
+  h1 span { color: var(--gold); }
+  header p { margin: 14px auto 0; max-width: 34ch; color: var(--muted); font-size: 1.1rem; }
+
+  .grid { display: grid; gap: 18px; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); padding: 22px 0 56px; }
+  .card {
+    position: relative; display: block; width: 100%; padding: 0; text-align: left; cursor: pointer; color: inherit; font: inherit;
+    background: var(--card); border: 1px solid var(--line); border-radius: 22px; overflow: hidden;
+    transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+  }
+  .card:hover, .card:focus-visible { transform: translateY(-4px); border-color: var(--gold); box-shadow: 0 14px 34px rgba(0, 0, 0, .45); outline: none; }
+  .card img { display: block; width: 100%; aspect-ratio: 9 / 20; object-fit: cover; }
+  .card .meta { padding: 12px 14px 14px; }
+  .card .name { font-weight: 700; font-size: 1.05rem; }
+  .card .sub { color: var(--muted); font-size: .88rem; }
+  .badge {
+    position: absolute; top: 12px; left: 12px; padding: 3px 10px 3px 8px; border-radius: 99px; font-size: .72rem; font-weight: 800; letter-spacing: .08em;
+    color: #2a1630; background: var(--gold); display: inline-flex; align-items: center; gap: 6px;
+  }
+  .badge::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: #e0331f; animation: pulse 1.6s ease-in-out infinite; }
+  @keyframes pulse { 50% { opacity: .25; } }
+  .soon { display: grid; place-items: center; text-align: center; min-height: 240px; padding: 20px; color: var(--muted); border: 2px dashed var(--line); border-radius: 22px; }
+
+  footer { text-align: center; color: var(--muted); font-size: .85rem; padding: 0 0 40px; }
+
+  dialog {
+    width: min(94vw, 760px); max-height: 94vh; padding: 0; color: var(--ink); background: var(--bg2);
+    border: 1px solid var(--line); border-radius: 26px; overflow: auto; box-shadow: 0 30px 80px rgba(0, 0, 0, .6);
+  }
+  dialog::backdrop { background: rgba(10, 4, 16, .76); backdrop-filter: blur(4px); }
+  .modal { display: grid; gap: 22px; padding: 22px; grid-template-columns: minmax(0, 250px) 1fr; align-items: start; }
+  .phone { border-radius: 26px; overflow: hidden; border: 3px solid #0b0511; background: #000; aspect-ratio: 9 / 20; }
+  .phone video { display: block; width: 100%; height: 100%; object-fit: cover; }
+  .close {
+    position: sticky; float: right; top: 10px; right: 10px; margin: 10px 10px 0 0; z-index: 2; width: 40px; height: 40px; border-radius: 50%;
+    border: 1px solid var(--line); background: rgba(0, 0, 0, .35); color: var(--ink); font-size: 1.4rem; line-height: 1; cursor: pointer;
+  }
+  .modal h2 { margin: 0 0 4px; font-size: 1.6rem; }
+  .modal .lead { margin: 0 0 16px; color: var(--muted); }
+  .tabs { display: flex; gap: 8px; margin-bottom: 18px; }
+  .tab {
+    flex: 1; padding: 9px 12px; border-radius: 12px; border: 1px solid var(--line); background: transparent; color: var(--ink);
+    font: inherit; font-weight: 600; cursor: pointer;
+  }
+  .tab[aria-pressed="true"] { background: var(--gold); color: #2a1630; border-color: var(--gold); }
+  .choices { display: grid; gap: 12px; }
+  .dl {
+    display: flex; align-items: center; gap: 14px; padding: 14px 16px; border-radius: 16px; text-decoration: none; color: var(--ink);
+    background: linear-gradient(135deg, #5b2a4d, #3a1b42); border: 1px solid var(--line); transition: transform .15s ease, border-color .15s ease;
+  }
+  .dl:hover, .dl:focus-visible { transform: translateY(-2px); border-color: var(--gold); outline: none; }
+  .dl.live { background: linear-gradient(135deg, #ff8a3d, #e8573a); color: #2a1630; border-color: transparent; }
+  .dl .ico { font-size: 1.6rem; width: 2rem; text-align: center; }
+  .dl b { display: block; font-size: 1.05rem; }
+  .dl small { opacity: .8; }
+  .alt { margin: 14px 2px 0; font-size: .88rem; color: var(--muted); }
+  .alt a { color: var(--gold); }
+  .tip { margin: 16px 0 0; padding: 12px 14px; border-radius: 14px; background: rgba(255, 255, 255, .06); color: var(--muted); font-size: .85rem; }
+  @media (max-width: 600px) { .modal { grid-template-columns: 1fr; } .phone { max-width: 220px; margin: 0 auto; } }
+  @media (prefers-reduced-motion: reduce) { .badge::before { animation: none; } .card, .dl { transition: none; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>Download <span>Live Wallpapers</span></h1>
+    <p>Free lock-screen wallpapers of our story characters.</p>
+  </header>
+
+  <main>
+    <div class="grid" id="grid"></div>
+  </main>
+  <footer>Free for personal use. More wallpapers coming with every new story.</footer>
+</div>
+
+<dialog id="dlg" aria-labelledby="dlg-title">
+  <button class="close" id="close" aria-label="Close">&times;</button>
+  <div class="modal">
+    <div class="phone"><video id="vid" muted loop playsinline autoplay></video></div>
+    <div>
+      <h2 id="dlg-title"></h2>
+      <p class="lead" id="dlg-lead"></p>
+      <div class="tabs" id="tabs" role="group" aria-label="Style"></div>
+      <div class="choices">
+        <a class="dl live" id="dl-live" download><span class="ico">&#9654;</span><span><b>Live wallpaper</b><small>Moving video &middot; MP4</small></span></a>
+        <a class="dl" id="dl-still" download><span class="ico">&#128444;</span><span><b>Still wallpaper</b><small>Picture &middot; PNG</small></span></a>
+      </div>
+      <p class="alt">On an iPhone? <a id="dl-iphone" download>Get the iPhone-sized still</a>.</p>
+      <p class="tip"><b>To use the live one:</b> on Samsung or Xiaomi, open the video in Gallery and choose &ldquo;Set as wallpaper&rdquo;. Other Android phones can use a free video wallpaper app.</p>
+    </div>
+  </div>
+</dialog>
+
+<script>
+  // Add a new wallpaper here and it appears on the page.
+  const WALLPAPERS = [
+    {
+      id: "ganesh-ji", name: "Ganesh ji", lead: "Ganesh ji on his lotus with Mooshak and a plate of laddoos. Pick a style.", live: true,
+      folder: "wallpapers/ganesh-ji/",
+      styles: [
+        { key: "festive", label: "Festive", video: "live-festive.mp4", still: "still-festive.png", iphone: "still-festive-iphone.png", preview: "preview-festive.jpg" },
+        { key: "night", label: "Diya night", video: "live-night.mp4", still: "still-night.png", iphone: "still-night-iphone.png", preview: "preview-night.jpg" },
+      ],
+    },
+  ];
+
+  const $ = (id) => document.getElementById(id);
+  const grid = $("grid"), dlg = $("dlg"), vid = $("vid");
+  let current = null, style = 0, opener = null;
+
+  WALLPAPERS.forEach((w) => {
+    const b = document.createElement("button");
+    b.className = "card"; b.type = "button"; b.setAttribute("aria-label", w.name + " wallpaper, open downloads");
+    b.innerHTML = (w.live ? '<span class="badge">LIVE</span>' : "") +
+      '<img alt="" loading="lazy" src="' + w.folder + w.styles[0].preview + '">' +
+      '<div class="meta"><div class="name">' + w.name + '</div><div class="sub">Live &amp; still &middot; ' + w.styles.length + ' styles</div></div>';
+    b.addEventListener("click", () => open(w, b));
+    grid.appendChild(b);
+  });
+  const soon = document.createElement("div"); soon.className = "soon"; soon.textContent = "More wallpapers coming soon"; grid.appendChild(soon);
+
+  function open(w, from) {
+    current = w; opener = from; style = 0; $("dlg-title").textContent = w.name; $("dlg-lead").textContent = w.lead;
+    const tabs = $("tabs"); tabs.innerHTML = "";
+    tabs.hidden = w.styles.length < 2;
+    w.styles.forEach((s, i) => {
+      const t = document.createElement("button"); t.type = "button"; t.className = "tab"; t.textContent = s.label;
+      t.addEventListener("click", () => pick(i)); tabs.appendChild(t);
+    });
+    pick(0);
+    dlg.showModal();
+  }
+  function pick(i) {
+    style = i; const s = current.styles[i], f = current.folder;
+    [...$("tabs").children].forEach((t, k) => t.setAttribute("aria-pressed", String(k === i)));
+    vid.src = f + s.video; vid.poster = f + s.preview; vid.play().catch(() => {});
+    $("dl-live").href = f + s.video; $("dl-live").setAttribute("download", current.id + "-" + s.key + "-live.mp4");
+    $("dl-still").href = f + s.still; $("dl-still").setAttribute("download", current.id + "-" + s.key + "-still.png");
+    $("dl-iphone").href = f + s.iphone; $("dl-iphone").setAttribute("download", current.id + "-" + s.key + "-still-iphone.png");
+  }
+  function shut() { dlg.close(); }
+  $("close").addEventListener("click", shut);
+  dlg.addEventListener("click", (e) => { if (e.target === dlg) shut(); });   // click on the dimmed backdrop
+  dlg.addEventListener("close", () => { vid.pause(); vid.removeAttribute("src"); vid.load(); if (opener) opener.focus(); });
+</script>
+</body>
+</html>
